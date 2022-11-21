@@ -36,13 +36,20 @@ public class APIHelper {
             if(http.getResponseCode() == 204){
                 http.disconnect();
                 //todo check for code 412 when server isn't running
-            }else{
+            }else if(http.getResponseCode() == 412 ){
+                System.out.println("Server is not running");
+                http.disconnect();
+            } else {
                 //todo change to error logger
                 //todo create fail safe class to notify user of failures
                 //todo create error logger that can handle https errors
                 System.out.println(http.getURL());
                 System.out.println(http.getResponseCode());
                 System.out.println(http.getResponseMessage());
+                System.out.println(http.getErrorStream());
+                System.out.println(http.getContentType());
+                System.out.println(http.getContent());
+                System.out.println(stream);
                 http.disconnect();
             }
         } catch (IOException e) {

@@ -17,10 +17,16 @@ public class config {
     public static final Path configDir = Paths.get("config");
     public static final String defaultConfig = "/default.yml";
 
+    public String fish = "minecraft:execute at mov51 run summon minecraft:tropical_fish ~ ~1 ~ {CustomName:\\\"{0}\\\",DeathLootTable:\\\"mctools:entities/nodrop\\\",CustomNameVisible:1,PersistenceRequired:1b,CanPickUpLoot:0b,Health:10,Attributes:[{Name:\\\"generic.max_health\\\",Base:10}],HandDropChances:[2F,2F],HandItems:[{id:\\\"minecraft:tropical_fish\\\",tag:{display:{Name:\\'{\\\"text\\\":\\\"{0}\\\"}\\',Lore:[\\'{\\\"text\\\":\\\"You failed, you didnt save me.\\\"}\\',\\'{\\\"text\\\":\\\"\\\"}\\',\\'{\\\"text\\\":\\\"Sent with loathing,\\\"}\\',\\'{\\\"text\\\":\\\"-{0}\\\"}\\']}},Count:1},{}]}";
+
+    public String announce = "title mov51 title {\\\"text\\\":\\\"You must save {0}\\\",\\\"color\\\":\\\"red\\\"}";
+
     private enum YAMLKeys {
         APIkey ("APIkey"),
         serverUUID ("serverUUID"),
-        panelURL ("panelURL");
+        panelURL ("panelURL"),
+
+        command ("command");
 
         public final String defaultKey;
 
@@ -47,6 +53,14 @@ public class config {
         String key = YAMLKeys.serverUUID.defaultKey;
         return loadGetter(key);
     }
+
+    public String getCommand(String command ,String[] args, int start){
+        for(int i = start; i < args.length; i++){
+            command = command.replace("{"+(i - start)+"}",args[i]);
+        }
+        return command;
+    }
+
 
     private String loadGetter(String key){
         if(configMap.containsKey(key)){

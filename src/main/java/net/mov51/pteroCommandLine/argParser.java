@@ -10,23 +10,30 @@ import static net.mov51.pteroCommandLine.helpers.config.configDir;
 public class argParser {
     static String configurationFile;
     public static void parse(String[] args){
-        switch (args.length){
-            case 0:
-                System.out.println("Please provide a configuration file and a command!");
-                break;
-            case 1:
-                System.out.println("using default configuration file");
-                configurationFile = "config.yml";
-                run(configurationFile, args[0]);
-                break;
-            case 2:
-                configurationFile = args[0];
-                run(configurationFile, args[1]);
-                break;
+        if(args.length == 0){
+            System.out.println("No arguments provided");
+            System.exit(1);
         }
+        configurationFile = "config.yml";
+        run(configurationFile, args);
     }
-    private static void run(String configurationFile, String command){
+    private static void run(String configurationFile, String[] args){
         config configuration = new config(configurationFile);
-        sendCommand(configuration,command);
+        switch (args[0])
+        {
+            case "fish":
+                sendCommand(configuration,configuration.getCommand(configuration.fish,args, 1));
+                break;
+            case "announce":
+                sendCommand(configuration,configuration.getCommand(configuration.announce,args, 1));
+                break;
+            case "custom":
+                sendCommand(configuration,configuration.getCommand(args[1],args, 2));
+                break;
+            default:
+                System.out.println("Invalid command");
+                System.exit(1);
+        }
+
     }
 }
